@@ -1,8 +1,6 @@
 .idea/
 .idea/*/*
 .idea/httpRequests
-config.yml
-config.yaml
 config.yml.sample
 !docs/config.yml
 !.github/ISSUE_TEMPLATE/config.yml
@@ -33,7 +31,6 @@ mage_output_file.go
 mage-static
 .DS_Store
 /plugins/*
-/plugins-dev/*
 
 # Devenv
 .devenv*
