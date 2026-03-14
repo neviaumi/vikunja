@@ -11,4 +11,4 @@ services:
       - ./files:/app/vikunja/files
       - ./config.yml:/app/vikunja/config.yml
       - ./db:/db
-    restart: "no"
+    restart: unless-stopped
