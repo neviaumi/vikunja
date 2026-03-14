@@ -27,6 +27,7 @@ ARG TARGETOS TARGETARCH TARGETVARIANT RELEASE_VERSION
 ENV RELEASE_VERSION=$RELEASE_VERSION
 
 RUN export PATH=$PATH:$GOPATH/bin && \
+    mage plugins:build ./plugins-dev/default-user/default-user.go && \
 	mage build:clean && \
     mage release:xgo "${TARGETOS}/${TARGETARCH}/${TARGETVARIANT}"
 
