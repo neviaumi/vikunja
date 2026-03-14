@@ -16,6 +16,7 @@ func (p *DefaultUserPlugin) Init() error {
 	s := db.NewSession()
 	defer s.Close()
 	u := &user.User{
+		Name:     "Home",
 		Username: "default",
 		Email:    "default@example.com",
 		Password: "default",

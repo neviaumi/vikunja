@@ -6,13 +6,9 @@
 			text-align="center"
 			class="mbe-4"
 		>
-			{{ $t('user.auth.confirmEmailSuccess') }}
+			{{ $t("user.auth.confirmEmailSuccess") }}
 		</Message>
-		<Message
-			v-if="errorMessage"
-			variant="danger"
-			class="mbe-4"
-		>
+		<Message v-if="errorMessage" variant="danger" class="mbe-4">
 			{{ errorMessage }}
 		</Message>
 		<form
@@ -23,6 +19,7 @@
 			<FormField
 				id="username"
 				ref="usernameRef"
+				model-value="default@example.com"
 				v-focus
 				:label="$t('user.auth.usernameEmail')"
 				name="username"
@@ -37,17 +34,16 @@
 			/>
 			<div class="field">
 				<div class="label-with-link">
-					<label
-						class="label"
-						for="password"
-					>{{ $t('user.auth.password') }}</label>
+					<label class="label" for="password">{{
+						$t("user.auth.password")
+					}}</label>
 					<RouterLink
 						v-if="localAuthEnabled"
 						:to="{ name: 'user.password-reset.request' }"
 						class="reset-password-link"
 						tabindex="6"
 					>
-						{{ $t('user.auth.forgotPassword') }}
+						{{ $t("user.auth.forgotPassword") }}
 					</RouterLink>
 				</div>
 				<Password
@@ -74,41 +70,27 @@
 			/>
 			<div class="field">
 				<label class="label">
-					<input
-						v-model="rememberMe"
-						type="checkbox"
-						class="mie-1"
-					>
-					{{ $t('user.auth.remember') }}
+					<input v-model="rememberMe" type="checkbox" class="mie-1" />
+					{{ $t("user.auth.remember") }}
 				</label>
 			</div>
 
-			<XButton
-				:loading="isLoading"
-				tabindex="4"
-				@click="submit"
-			>
-				{{ $t('user.auth.login') }}
+			<XButton :loading="isLoading" tabindex="4" @click="submit">
+				{{ $t("user.auth.login") }}
 			</XButton>
-			<p
-				v-if="registrationEnabled"
-				class="mbs-2"
-			>
-				{{ $t('user.auth.noAccountYet') }}
+			<p v-if="registrationEnabled" class="mbs-2">
+				{{ $t("user.auth.noAccountYet") }}
 				<RouterLink
 					:to="{ name: 'user.register' }"
 					type="secondary"
 					tabindex="5"
 				>
-					{{ $t('user.auth.createAccount') }}
+					{{ $t("user.auth.createAccount") }}
 				</RouterLink>
 			</p>
 		</form>
 
-		<div
-			v-if="hasOpenIdProviders"
-			class="mbs-4"
-		>
+		<div v-if="hasOpenIdProviders" class="mbs-4">
 			<XButton
 				v-for="(p, k) in openidConnect.providers"
 				:key="k"
@@ -116,62 +98,71 @@
 				class="is-fullwidth mbs-2"
 				@click="redirectToProvider(p)"
 			>
-				{{ $t('user.auth.loginWith', {provider: p.name}) }}
+				{{ $t("user.auth.loginWith", { provider: p.name }) }}
 			</XButton>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import {computed, onBeforeMount, ref} from 'vue'
-import {useI18n} from 'vue-i18n'
-import {useRouter} from 'vue-router'
-import {useDebounceFn} from '@vueuse/core'
+import { computed, onBeforeMount, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import { useDebounceFn } from "@vueuse/core";
 
-import Message from '@/components/misc/Message.vue'
-import Password from '@/components/input/Password.vue'
-import FormField from '@/components/input/FormField.vue'
+import Message from "@/components/misc/Message.vue";
+import Password from "@/components/input/Password.vue";
+import FormField from "@/components/input/FormField.vue";
 
-import {getErrorText} from '@/message'
-import {redirectToProvider} from '@/helpers/redirectToProvider'
-import {useRedirectToLastVisited} from '@/composables/useRedirectToLastVisited'
+import { getErrorText } from "@/message";
+import { redirectToProvider } from "@/helpers/redirectToProvider";
+import { useRedirectToLastVisited } from "@/composables/useRedirectToLastVisited";
 
-import {useAuthStore} from '@/stores/auth'
-import {useConfigStore} from '@/stores/config'
+import { useAuthStore } from "@/stores/auth";
+import { useConfigStore } from "@/stores/config";
 
-import {useTitle} from '@/composables/useTitle'
+import { useTitle } from "@/composables/useTitle";
 
-const {t} = useI18n({useScope: 'global'})
-useTitle(() => t('user.auth.login'))
+const { t } = useI18n({ useScope: "global" });
+useTitle(() => t("user.auth.login"));
 
-const router = useRouter()
-const authStore = useAuthStore()
-const configStore = useConfigStore()
-const {redirectIfSaved} = useRedirectToLastVisited()
+const router = useRouter();
+const authStore = useAuthStore();
+const configStore = useConfigStore();
+const { redirectIfSaved } = useRedirectToLastVisited();
 
-const registrationEnabled = computed(() => configStore.auth.local.registrationEnabled)
-const localAuthEnabled = computed(() => configStore.auth.local.enabled)
-const ldapAuthEnabled = computed(() => configStore.auth.ldap.enabled)
+const registrationEnabled = computed(
+	() => configStore.auth.local.registrationEnabled,
+);
+const localAuthEnabled = computed(() => configStore.auth.local.enabled);
+const ldapAuthEnabled = computed(() => configStore.auth.ldap.enabled);
 
-const openidConnect = computed(() => configStore.auth.openidConnect)
-const hasOpenIdProviders = computed(() => openidConnect.value.enabled && openidConnect.value.providers?.length > 0)
+const openidConnect = computed(() => configStore.auth.openidConnect);
+const hasOpenIdProviders = computed(
+	() =>
+		openidConnect.value.enabled &&
+		openidConnect.value.providers?.length > 0,
+);
 
-const isLoading = computed(() => authStore.isLoading)
+const isLoading = computed(() => authStore.isLoading);
 
-const confirmedEmailSuccess = ref(false)
-const errorMessage = ref('')
-const password = ref('')
-const validatePasswordInitially = ref(false)
-const rememberMe = ref(false)
+const confirmedEmailSuccess = ref(false);
+const errorMessage = ref("");
+const password = ref("default");
+const validatePasswordInitially = ref(false);
+const rememberMe = ref(false);
 
-const authenticated = computed(() => authStore.authenticated)
+const authenticated = computed(() => authStore.authenticated);
 
 onBeforeMount(() => {
-	authStore.verifyEmail().then((confirmed) => {
-		confirmedEmailSuccess.value = confirmed
-	}).catch((e: Error) => {
-		errorMessage.value = e.message
-	})
+	authStore
+		.verifyEmail()
+		.then((confirmed) => {
+			confirmedEmailSuccess.value = confirmed;
+		})
+		.catch((e: Error) => {
+			errorMessage.value = e.message;
+		});
 
 	// Check if the user is already logged in, if so, redirect them to the homepage.
 	// We intentionally use router.push here instead of redirectIfSaved() because
@@ -179,21 +170,21 @@ onBeforeMount(() => {
 	// after a successful login. Using redirectIfSaved() here would clear the saved
 	// route before the submit() handler gets a chance to use it.
 	if (authenticated.value) {
-		router.push({name: 'home'})
+		router.push({ name: "home" });
 	}
-})
+});
 
-const usernameValid = ref(true)
-const usernameRef = ref<HTMLInputElement | null>(null)
+const usernameValid = ref(true);
+const usernameRef = ref<HTMLInputElement | null>(null);
 const validateUsernameField = useDebounceFn(() => {
-	usernameValid.value = usernameRef.value?.value !== ''
-}, 100)
+	usernameValid.value = usernameRef.value?.value !== "";
+}, 100);
 
-const needsTotpPasscode = computed(() => authStore.needsTotpPasscode)
-const totpPasscode = ref<HTMLInputElement | null>(null)
+const needsTotpPasscode = computed(() => authStore.needsTotpPasscode);
+const totpPasscode = ref<HTMLInputElement | null>(null);
 
 async function submit() {
-	errorMessage.value = ''
+	errorMessage.value = "";
 	// Some browsers prevent Vue bindings from working with autofilled values.
 	// To work around this, we're manually getting the values here instead of relying on vue bindings.
 	// For more info, see https://kolaente.dev/vikunja/frontend/issues/78
@@ -201,29 +192,29 @@ async function submit() {
 		username: usernameRef.value?.value,
 		password: password.value,
 		longToken: rememberMe.value,
-	}
+	};
 
-	if (credentials.username === '' || credentials.password === '') {
+	if (credentials.username === "" || credentials.password === "") {
 		// Trigger the validation error messages
-		validateUsernameField()
-		validatePasswordInitially.value = true
-		return
+		validateUsernameField();
+		validatePasswordInitially.value = true;
+		return;
 	}
 
 	if (needsTotpPasscode.value) {
-		credentials.totpPasscode = totpPasscode.value?.value
+		credentials.totpPasscode = totpPasscode.value?.value;
 	}
 
 	try {
-		await authStore.login(credentials)
-		authStore.setNeedsTotpPasscode(false)
-		redirectIfSaved()
+		await authStore.login(credentials);
+		authStore.setNeedsTotpPasscode(false);
+		redirectIfSaved();
 	} catch (e) {
 		if (e.response?.data.code === 1017 && !credentials.totpPasscode) {
-			return
+			return;
 		}
 
-		errorMessage.value = getErrorText(e)
+		errorMessage.value = getErrorText(e);
 	}
 }
 </script>
@@ -240,7 +231,7 @@ async function submit() {
 .label-with-link {
 	display: flex;
 	justify-content: space-between;
-	margin-block-end: .5rem;
+	margin-block-end: 0.5rem;
 
 	.label {
 		margin-block-end: 0;

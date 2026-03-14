@@ -1,0 +1,14 @@
+services:
+  vikunja:
+    build: .
+    environment:
+      VIKUNJA_SERVICE_PUBLICURL: http://todo.home.pi/
+      VIKUNJA_SERVICE_JWTSECRET: de11dbeff989d29907a547bd57038c6eeca4a197c41e12d705d504c383679f59
+      VIKUNJA_DATABASE_PATH: /db/vikunja.db
+    ports:
+      - 3456:3456
+    volumes:
+      - ./files:/app/vikunja/files
+      - ./config.yml:/app/vikunja/config.yml
+      - ./db:/db
+    restart: "no"

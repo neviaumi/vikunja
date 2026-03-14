@@ -1,3 +1,5 @@
 plugins:
   enabled: true
   dir: "plugins"
+service:
+  publicurl: "http://localhost:3456"
