@@ -1,6 +1,6 @@
 services:
   vikunja:
-    image: vikunja-pi:168393a1d
+    image: vikunja-pi:522fe96bc
     environment:
       VIKUNJA_SERVICE_PUBLICURL: http://todo.home.pi/
       VIKUNJA_SERVICE_JWTSECRET: de11dbeff989d29907a547bd57038c6eeca4a197c41e12d705d504c383679f59
