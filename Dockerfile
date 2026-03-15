@@ -28,8 +28,7 @@ ENV RELEASE_VERSION=$RELEASE_VERSION
 
 RUN export PATH=$PATH:$GOPATH/bin && \
 	mage build:clean && \
-    mage release:xgo "${TARGETOS}/${TARGETARCH}/${TARGETVARIANT}" && \
-	mage plugins:build ./plugins-dev/default-user/default-user.go
+    mage release:xgo "${TARGETOS}/${TARGETARCH}/${TARGETVARIANT}"
 
 RUN mkdir -p /tmp && chmod 1777 /tmp
 
@@ -47,8 +46,11 @@ LABEL org.opencontainers.image.source='https://code.vikunja.io/vikunja'
 LABEL org.opencontainers.image.licenses='AGPLv3'
 LABEL org.opencontainers.image.title='Vikunja'
 
+COPY scripts/start.sh /app/vikunja/start.sh
+RUN chmod +x /app/vikunja/start.sh
+
 WORKDIR /app/vikunja
-ENTRYPOINT [ "/app/vikunja/vikunja" ]
+ENTRYPOINT [ "/app/vikunja/start.sh" ]
 EXPOSE 3456
 
 COPY --from=apibuilder --chown=1000:1000 /tmp /tmp
@@ -60,4 +62,3 @@ ENV VIKUNJA_DATABASE_PATH=/db/vikunja.db
 
 COPY --from=apibuilder /build/vikunja-* vikunja
 COPY --from=apibuilder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=apibuilder /go/src/code.vikunja.io/api/plugins ./plugins
