@@ -18,7 +18,7 @@ func (p *DefaultUserPlugin) Init() error {
 	u := &user.User{
 		Name:     "Home",
 		Username: "default",
-		Email:    "default@example.com",
+		Email:    "my-home@default.com",
 		Password: "default",
 	}
 	newUser, err := user.CreateUser(s, u)
