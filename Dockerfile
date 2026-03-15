@@ -46,8 +46,7 @@ LABEL org.opencontainers.image.source='https://code.vikunja.io/vikunja'
 LABEL org.opencontainers.image.licenses='AGPLv3'
 LABEL org.opencontainers.image.title='Vikunja'
 
-COPY scripts/start.sh /app/vikunja/start.sh
-RUN chmod +x /app/vikunja/start.sh
+COPY --chmod=755 scripts/start.sh /app/vikunja/start.sh
 
 WORKDIR /app/vikunja
 ENTRYPOINT [ "/app/vikunja/start.sh" ]
