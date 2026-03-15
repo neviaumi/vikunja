@@ -27,9 +27,9 @@ ARG TARGETOS TARGETARCH TARGETVARIANT RELEASE_VERSION
 ENV RELEASE_VERSION=$RELEASE_VERSION
 
 RUN export PATH=$PATH:$GOPATH/bin && \
-    mage plugins:build ./plugins-dev/default-user/default-user.go && \
 	mage build:clean && \
-    mage release:xgo "${TARGETOS}/${TARGETARCH}/${TARGETVARIANT}"
+    mage release:xgo "${TARGETOS}/${TARGETARCH}/${TARGETVARIANT}" && \
+	mage plugins:build ./plugins-dev/default-user/default-user.go
 
 RUN mkdir -p /tmp && chmod 1777 /tmp
 
@@ -59,5 +59,5 @@ ENV VIKUNJA_SERVICE_ROOTPATH=/app/vikunja/
 ENV VIKUNJA_DATABASE_PATH=/db/vikunja.db
 
 COPY --from=apibuilder /build/vikunja-* vikunja
-COPY --from=apibuilder /build/plugins ./plugins
+COPY --from=apibuilder /go/src/code.vikunja.io/api/plugins ./plugins
 COPY --from=apibuilder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/

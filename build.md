@@ -31,7 +31,7 @@ To avoid Out of Memory (OOM) errors on the target device, build the Docker image
 Export the built image into a tar archive so it can be transferred securely over the local network without needing a public container registry.
 
 ```bash
-docker save vikunja-pi:latest vikunja-pi:$COMMIT_HASH -o vikunja-pi-$COMMIT_HASH.tar
+docker save vikunja-pi:latest vikunja-pi:$COMMIT_HASH -o /tmp/vikunja-pi-$COMMIT_HASH.tar
 ```
 *Note: Saving both tags ensures the target device recognizes both the explicit version and the latest pointer when imported.*
 
@@ -41,7 +41,7 @@ Transfer the archive to the target device and load it into its local Docker daem
 
 1.  Transfer the file via `scp` (replace `<PI_IP_ADDRESS>` and `<USER>` with your actual details):
     ```bash
-    scp vikunja-pi-$COMMIT_HASH.tar <USER>@<PI_IP_ADDRESS>:/tmp/
+    scp /tmp/vikunja-pi-$COMMIT_HASH.tar <USER>@<PI_IP_ADDRESS>:/tmp/
     ```
 2.  SSH into your target device:
     ```bash
